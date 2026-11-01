@@ -54,4 +54,6 @@
     <string name="clear_title">Wyczyścić formularz?</string>
     <string name="clear_message">Wszystkie wpisane dane zostaną usunięte.</string>
     <string name="clear_yes">Tak, wyczyść</string>
+
+    <string name="cleared">Formularz wyczyszczony</string>
 </resources>

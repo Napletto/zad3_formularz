@@ -93,14 +93,74 @@ public class MainActivity extends AppCompatActivity {
         new AlertDialog.Builder(this)
                 .setTitle(R.string.clear_title)
                 .setMessage(R.string.clear_message)
-                .setPositiveButton(R.string.clear_yes, (dialog, which) -> clearForm())
+                .setPositiveButton(R.string.clear_yes, (dialog, which) -> clearFormWithUndo())
                 .setNegativeButton(R.string.no, null)
+                .show();
+    }
+    // "zdjęcie" stanu formularza, żeby dało się go odtworzyć
+    private static class FormState {
+        String name, address, summary;
+        int pizza, checkedId, quantity;
+        boolean cheese, mushrooms, olives, delivery;
+    }
+
+    private FormState saveState() {
+        FormState s = new FormState();
+        s.name = etName.getText().toString();
+        s.address = etAddress.getText().toString();
+        s.summary = tvSummary.getText().toString();
+        s.pizza = spPizza.getSelectedItemPosition();
+        s.checkedId = rgSize.getCheckedRadioButtonId();     // -1 = nic nie zaznaczono
+        s.quantity = sbQuantity.getProgress();
+        s.cheese = cbCheese.isChecked();
+        s.mushrooms = cbMushrooms.isChecked();
+        s.olives = cbOlives.isChecked();
+        s.delivery = swDelivery.isChecked();
+        return s;
+    }
+
+    private void restoreState(FormState s) {
+        etName.setText(s.name);
+        etAddress.setText(s.address);
+        tvSummary.setText(s.summary);
+        spPizza.setSelection(s.pizza);
+        if (s.checkedId != -1) {
+            rgSize.check(s.checkedId);
+        }
+        sbQuantity.setProgress(s.quantity);
+        cbCheese.setChecked(s.cheese);
+        cbMushrooms.setChecked(s.mushrooms);
+        cbOlives.setChecked(s.olives);
+        swDelivery.setChecked(s.delivery);                  // listener sam pokaże adres
+    }
+
+    private void clearFormWithUndo() {
+        FormState previous = saveState();       // najpierw zapamiętujemy, potem czyścimy
+        clearForm();
+
+        Snackbar.make(findViewById(R.id.main), R.string.cleared, Snackbar.LENGTH_LONG)
+                .setAction(R.string.undo, v -> restoreState(previous))
                 .show();
     }
 
     private void clearForm() {
         etName.setText("");
+        etName.setError(null);
+
         etAddress.setText("");
+        etAddress.setError(null);
+
+        spPizza.setSelection(0);
+        rgSize.clearCheck();
+
+        cbCheese.setChecked(false);
+        cbMushrooms.setChecked(false);
+        cbOlives.setChecked(false);
+
+        sbQuantity.setProgress(0);
+        swDelivery.setChecked(false);       // listener sam ukryje pole adresu
+
+        tvSummary.setText("");
     }
     private void askForConfirmation() {
         new AlertDialog.Builder(this)
