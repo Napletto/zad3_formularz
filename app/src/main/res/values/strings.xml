@@ -49,4 +49,9 @@
 
     <string name="ordered">Zamówienie złożone</string>
     <string name="undo">Cofnij</string>
+
+    <string name="btn_clear">WYCZYŚĆ FORMULARZ</string>
+    <string name="clear_title">Wyczyścić formularz?</string>
+    <string name="clear_message">Wszystkie wpisane dane zostaną usunięte.</string>
+    <string name="clear_yes">Tak, wyczyść</string>
 </resources>

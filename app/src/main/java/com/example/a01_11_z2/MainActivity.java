@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     private TextView tvQuantityValue, tvSummary;
     private MaterialSwitch swDelivery;
     private LinearLayout llAddress;
-    private Button btnOrder;
+    private Button btnOrder, btnClear;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +50,7 @@ public class MainActivity extends AppCompatActivity {
         swDelivery = findViewById(R.id.swDelivery);
         llAddress = findViewById(R.id.llAddress);
         btnOrder = findViewById(R.id.btnOrder);
+        btnClear = findViewById(R.id.btnClear);
 
         setUpPizzaSpinner();
         setUpListeners();
@@ -86,6 +87,20 @@ public class MainActivity extends AppCompatActivity {
                 askForConfirmation();
             }
         });
+        btnClear.setOnClickListener(v -> askForClear());
+    }
+    private void askForClear() {
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.clear_title)
+                .setMessage(R.string.clear_message)
+                .setPositiveButton(R.string.clear_yes, (dialog, which) -> clearForm())
+                .setNegativeButton(R.string.no, null)
+                .show();
+    }
+
+    private void clearForm() {
+        etName.setText("");
+        etAddress.setText("");
     }
     private void askForConfirmation() {
         new AlertDialog.Builder(this)
